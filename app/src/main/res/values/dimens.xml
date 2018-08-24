@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Margin around the floating action button in CatalogActivity -->
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Common margin value used throughout the app -->
+    <dimen name="activity_margin">16dp</dimen>
+
+    <!-- Left padding for input fields -->
+    <dimen name="input_left_padding">4dp</dimen>
+
+    <!-- Right padding for drop down spinner -->
+    <dimen name="drop_down_right_padding">16dp</dimen>
+
+</resources>
