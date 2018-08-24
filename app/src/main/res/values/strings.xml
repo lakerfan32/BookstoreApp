@@ -58,7 +58,4 @@
 
     <!-- Label for dropdown menu option if the book is nonfiction [CHAR LIMIT=20] -->
     <string name="category_nonfiction">NonFiction</string>
-
-    <!-- Test string -->
-
 </resources>
