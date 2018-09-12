@@ -27,6 +27,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CatalogActivity" />
         </activity>
+        <provider
+            android:name=".data.BookProvider"
+            android:authorities="com.udacity.ralph.bookstoreapp"
+            android:exported="false" />
     </application>
 
 </manifest>
