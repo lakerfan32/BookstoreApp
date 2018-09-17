@@ -3,28 +3,21 @@ package com.udacity.ralph.bookstoreapp;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.udacity.ralph.bookstoreapp.data.BookContract.BookEntry;
-import com.udacity.ralph.bookstoreapp.data.BookDbHelper;
 
 /**
  * Displays list of books that were entered and stored in the app.
  */
 public class CatalogActivity extends AppCompatActivity {
-
-    /**
-     * Database helper that will provide us access to the database.
-     */
-    private BookDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +33,6 @@ public class CatalogActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        /**
-         * To access our database, we instantiate our subclass of SQLiteOpenHelper
-         * and pass the context, which is the current activity.
-         */
-        mDbHelper = new BookDbHelper(this);
     }
 
     @Override
@@ -59,9 +46,6 @@ public class CatalogActivity extends AppCompatActivity {
      * the books database.
      */
     private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -74,15 +58,14 @@ public class CatalogActivity extends AppCompatActivity {
                 BookEntry.COLUMN_CATEGORY,
                 BookEntry.COLUMN_GENRE };
 
-        // Perform a query on the BOOKS table
-        Cursor cursor = db.query(
-                BookEntry.TABLE_NAME,   // The table to query
-                projection,            // The columns to return
-                null,          // The columns for the WHERE clause
-                null,       // The values for the WHERE clause
-                null,          // Don't group the rows
-                null,           // Don't filter by row groups
-                null);         // The sort order
+        // Perform a query on the provider using the ContentResolver.
+        // Use the {@link BookEntry#CONTENT_URI} to access the book data.
+        Cursor cursor = getContentResolver().query(
+                BookEntry.CONTENT_URI,   // The content URI
+                projection,              // The columns to return for each row
+                null,            // Selection criteria
+                null,         // Selection criteria
+                null);          // The sort order for the returned rows
 
         TextView displayView = (TextView) findViewById(R.id.text_view_book);
 
@@ -145,13 +128,10 @@ public class CatalogActivity extends AppCompatActivity {
     }
 
     /**
-     * Helper method to insert hardcoded pet data into the database.
+     * Helper method to insert hardcoded book data into the database.
      * For debugging purposes only.
      */
     private void insertBook() {
-        // Gets the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
         // Create a ContentValues object where column names are the keys,
         // and the attributes of the book The Shining are the values.
         ContentValues values = new ContentValues();
@@ -163,17 +143,11 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_CATEGORY, BookEntry.CATEGORY_FICTION);
         values.put(BookEntry.COLUMN_GENRE, "Horror");
 
-        // Insert a new row for The Shining in the database, returning the ID of that new row.
-        // The first argument for db.insert() is the books table name.
-        // The second argument provides the name of a column in which the framework
-        // can insert NULL in the event that the ContentValues is empty (if
-        // this is set to "null", then the framework will not insert a row when
-        // there are no values).
-        // The third argument is the ContentValues object containing the info for The Shining.
-        long newRowId = db.insert(BookEntry.TABLE_NAME, null, values);
-
-        Log.v("CatalogActivity", "New row ID " + newRowId);
-
+        // Insert a new row for The Shining into the provider using the ContentResolver.
+        // Use the {@link BookEntry#CONTENT_URI} to indicate that we want to insert
+        // into the books database table.
+        // Receive the new content URI that will allow us to access The Shining's data in the future.
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
     }
 
     @Override

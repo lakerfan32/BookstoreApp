@@ -1,7 +1,7 @@
 package com.udacity.ralph.bookstoreapp;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.udacity.ralph.bookstoreapp.data.BookContract.BookEntry;
-import com.udacity.ralph.bookstoreapp.data.BookDbHelper;
 
 /**
  * Allows user to create a new book or edit an existing one.
@@ -125,12 +124,6 @@ public class EditorActivity extends AppCompatActivity {
         String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
         String genreString = mGenreEditText.getText().toString().trim();
 
-        // Create database helper
-        BookDbHelper mDbHelper = new BookDbHelper(this);
-
-        // Gets the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
         // Create a ContentValues object where column names are the keys,
         // and book attributes from the editor are the values.
         ContentValues values = new ContentValues();
@@ -142,16 +135,18 @@ public class EditorActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_CATEGORY, mCategory);
         values.put(BookEntry.COLUMN_GENRE, genreString);
 
-        // Insert a new row for book in the database, returning the ID of that new row.
-        long newRowId = db.insert(BookEntry.TABLE_NAME, null, values);
+        // Insert a new book into the provider, returning the content URI for the new book.
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
         // Show a toast message depending on whether or not the insertion was successful
-        if (newRowId == -1) {
-            // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, "Error with saving book", Toast.LENGTH_SHORT).show();
+        if (newUri == null) {
+            // If the new content URI is null, then there was an error with insertion.
+            Toast.makeText(this, getString(R.string.editor_insert_book_failed),
+                    Toast.LENGTH_SHORT).show();
         } else {
-            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            Toast.makeText(this, "Book saved with row id: " + newRowId, Toast.LENGTH_SHORT).show();
+            // Otherwise, the insertion was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_insert_book_successful),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
