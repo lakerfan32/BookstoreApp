@@ -78,14 +78,14 @@ public class BookProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case BOOKS:
-                // For the PETS code, query the pets table directly with the given
+                // For the BOOKS code, query the books table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
-                // could contain multiple rows of the pets table.
+                // could contain multiple rows of the books table.
                 cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case BOOK_ID:
-                // For the PET_ID code, extract out the ID from the URI.
+                // For the BOOK_ID code, extract out the ID from the URI.
                 // For an example URI such as "content://com.example.android.pets/pets/3",
                 // the selection will be "_id=?" and the selection argument will be a
                 // String array containing the actual ID of 3 in this case.
@@ -96,7 +96,7 @@ public class BookProvider extends ContentProvider {
                 selection = BookEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
-                // This will perform a query on the pets table where the _id equals 3 to return a
+                // This will perform a query on the books table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
                 cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -177,54 +177,65 @@ public class BookProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case BOOKS:
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateBook(uri, contentValues, selection, selectionArgs);
             case BOOK_ID:
-                // For the PET_ID code, extract out the ID from the URI,
+                // For the BOOK_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = BookEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateBook(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
 
     /**
-     * Update pets in the database with the given content values. Apply the changes to the rows
-     * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
+     * Update books in the database with the given content values. Apply the changes to the rows
+     * specified in the selection and selection arguments (which could be 0 or 1 or more books).
      * Return the number of rows that were successfully updated.
      */
-    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        // If the {@link PetEntry#COLUMN_PET_NAME} key is present,
+    private int updateBook(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        // If the {@link BookEntry#COLUMN_PRODUCT_NAME} key is present,
         // check that the name value is not null.
         if (values.containsKey(BookEntry.COLUMN_PRODUCT_NAME)) {
             String name = values.getAsString(BookEntry.COLUMN_PRODUCT_NAME);
             if (name == null) {
-                throw new IllegalArgumentException("Pet requires a name");
+                throw new IllegalArgumentException("Book requires a name");
             }
         }
 
-        // If the {@link PetEntry#COLUMN_PET_GENDER} key is present,
-        // check that the gender value is valid.
+        // If the {@link BookEntry#COLUMN_CATEGORY} key is present,
+        // check that the category value is valid.
         if (values.containsKey(BookEntry.COLUMN_CATEGORY)) {
             Integer category = values.getAsInteger(BookEntry.COLUMN_CATEGORY);
             if (category == null || !BookEntry.isValidCategory(category)) {
-                throw new IllegalArgumentException("Pet requires valid gender");
+                throw new IllegalArgumentException("Book requires valid category");
             }
         }
 
-        // If the {@link PetEntry#COLUMN_PET_WEIGHT} key is present,
-        // check that the weight value is valid.
+        // If the {@link BookEntry#COLUMN_PRICE} key is present,
+        // check that the price value is valid.
         if (values.containsKey(BookEntry.COLUMN_PRICE)) {
-            // Check that the weight is greater than or equal to 0 kg
+            // Check that the price is greater than or equal to 0 dollars
             Integer price = values.getAsInteger(BookEntry.COLUMN_PRICE);
             if (price != null && price < 0) {
-                throw new IllegalArgumentException("Pet requires valid weight");
+                throw new IllegalArgumentException("Book requires valid price");
             }
         }
 
-        // No need to check the breed, any value is valid (including null).
+        // If the {@link BookEntry#COLUMN_QUANTITY} key is present,
+        // check that the quantity value is valid.
+        if (values.containsKey(BookEntry.COLUMN_QUANTITY)) {
+            // Check that the quantity is greater than or equal to 0
+            Integer quantity = values.getAsInteger(BookEntry.COLUMN_QUANTITY);
+            if (quantity != null && quantity < 0) {
+                throw new IllegalArgumentException("Product requires valid quantity");
+            }
+        }
+
+        // No need to check the supplier name, supplier phone, or genre
+        // Any value is valid (including null).
 
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
