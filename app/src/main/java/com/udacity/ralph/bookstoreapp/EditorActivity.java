@@ -1,6 +1,11 @@
 package com.udacity.ralph.bookstoreapp;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -20,7 +25,13 @@ import com.udacity.ralph.bookstoreapp.data.BookContract.BookEntry;
 /**
  * Allows user to create a new book or edit an existing one.
  */
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    /** Identifier for the book data loader */
+    private static final int EXISTING_BOOK_LOADER = 0;
+
+    /** Content URI for the existing book (null if it's a new book) */
+    private Uri mCurrentBookUri;
 
     /** EditText field to enter the book's name */
     private EditText mProductNameEditText;
@@ -54,6 +65,29 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
+        // Examine the intent that was used to launch this activity,
+        // in order to figure out if we're creating a new book or editing an existing one.
+        Intent intent = getIntent();
+        mCurrentBookUri = intent.getData();
+
+        // If the intent DOES NOT contain a book content URI, then we know that we are
+        // creating a new book.
+        if (mCurrentBookUri == null) {
+            // This is a new book, so change the app bar to say "Add a Book"
+            setTitle(getString(R.string.editor_activity_title_new_book));
+
+            // Invalidate the options menu, so the "Delete" menu option can be hidden.
+            // (It doesn't make sense to delete a pet that hasn't been created yet.)
+           // invalidateOptionsMenu();
+        } else {
+            // Otherwise this is an existing book, so change app bar to say "Edit Book"
+            setTitle(getString(R.string.editor_activity_title_edit_book));
+
+            // Initialize a loader to read the book data from the database
+            // and display the current values in the editor
+            getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
+        }
 
         // Find all relevant views that we will need to read user input from
         mProductNameEditText = (EditText) findViewById(R.id.edit_product_name);
@@ -180,5 +214,93 @@ public class EditorActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // Since the editor shows all book attributes, define a projection that contains
+        // all columns from the book table
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN_PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE,
+                BookEntry.COLUMN_QUANTITY,
+                BookEntry.COLUMN_SUPPLIER_NAME,
+                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER,
+                BookEntry.COLUMN_CATEGORY,
+                BookEntry.COLUMN_GENRE };
+
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,      // Parent activity context
+                mCurrentBookUri,                  // Query the content URI for the current book
+                projection,                       // Columns to include in the resulting Cursor
+                null,                     // No selection clause
+                null,                  // No selection arguments
+                null);                   // Default sort order
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        // Bail early if the cursor is null or there is less than 1 row in the cursor
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+
+        // Proceed with moving to the first row of the cursor and reading data from it
+        // (This should be the only row in the cursor)
+        if (cursor.moveToFirst()) {
+            // Find the columns of book attributes that we're interested in
+            int productNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
+            int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
+            int supplierPhoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            int categoryColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_CATEGORY);
+            int genreColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_GENRE);
+
+            // Extract out the value from the Cursor for the given column index
+            String productName = cursor.getString(productNameColumnIndex);
+            int price = cursor.getInt(priceColumnIndex);
+            int quantity = cursor.getInt(quantityColumnIndex);
+            String supplierName = cursor.getString(supplierNameColumnIndex);
+            String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
+            int category = cursor.getInt(categoryColumnIndex);
+            String genre = cursor.getString(genreColumnIndex);
+
+            // Update the views on the screen with the values from the database
+            mProductNameEditText.setText(productName);
+            mPriceEditText.setText(Integer.toString(price));
+            mQuantityEditText.setText(Integer.toString(quantity));
+            mSupplierNameEditText.setText(supplierName);
+            mSupplierPhoneEditText.setText(supplierPhone);
+            mGenreEditText.setText(genre);
+
+            // Category is a dropdown spinner, so map the constant value from the database
+            // into one of the dropdown options (0 is Unknown, 1 is Fiction, 2 is NonFiction).
+            // Then call setSelection() so that option is displayed on screen as the current selection.
+            switch (category) {
+                case BookEntry.CATEGORY_FICTION:
+                    mCategorySpinner.setSelection(1);
+                    break;
+                case BookEntry.CATEGORY_NONFICTION:
+                    mCategorySpinner.setSelection(2);
+                    break;
+                default:
+                    mCategorySpinner.setSelection(0);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // If the loader is invalidated, clear out all the data from the input fields.
+        mProductNameEditText.setText("");
+        mPriceEditText.setText("");
+        mQuantityEditText.setText("");
+        mSupplierNameEditText.setText("");
+        mSupplierPhoneEditText.setText("");
+        mCategorySpinner.setSelection(0);     // Select "Unknown" category
+        mGenreEditText.setText("");
     }
 }
