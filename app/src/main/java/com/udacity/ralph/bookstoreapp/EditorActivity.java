@@ -147,23 +147,45 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String productNameString = mProductNameEditText.getText().toString().trim();
-
         String priceString = mPriceEditText.getText().toString().trim();
-        int price = Integer.parseInt(priceString);
-
         String quantityString = mQuantityEditText.getText().toString().trim();
-        int quantity = Integer.parseInt(quantityString);
-
         String supplierNameString = mSupplierNameEditText.getText().toString().trim();
         String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
         String genreString = mGenreEditText.getText().toString().trim();
+
+        // Check if this is supposed to be a new book
+        // and check if all the fields in the editor are blank
+        if (mCurrentBookUri == null &&
+                TextUtils.isEmpty(productNameString) && TextUtils.isEmpty(priceString) &&
+                TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierNameString) &&
+                TextUtils.isEmpty(supplierPhoneString) && TextUtils.isEmpty(genreString) &&
+                mCategory == BookEntry.CATEGORY_UNKNOWN) {
+            // Since no fields were modified, we can return early without creating a new book.
+            // No need to create ContentValues and no need to do any ContentProvider operations.
+            return;
+        }
 
         // Create a ContentValues object where column names are the keys,
         // and book attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN_PRODUCT_NAME, productNameString);
-        values.put(BookEntry.COLUMN_PRICE, priceString);
-        values.put(BookEntry.COLUMN_QUANTITY, quantityString);
+
+        // If the price is not provided by the user, don't try to parse the string into an
+        // integer value. Use 0 by default.
+        int price = 0;
+        if (!TextUtils.isEmpty(priceString)) {
+            price = Integer.parseInt(priceString);
+        }
+        values.put(BookEntry.COLUMN_PRICE, price);
+
+        // If the quantity is not provided by the user, don't try to parse the string into an
+        // integer value. Use 0 by default.
+        int quantity = 0;
+        if (!TextUtils.isEmpty(quantityString)) {
+            quantity = Integer.parseInt(quantityString);
+        }
+        values.put(BookEntry.COLUMN_QUANTITY, quantity);
+
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneString);
         values.put(BookEntry.COLUMN_CATEGORY, mCategory);
