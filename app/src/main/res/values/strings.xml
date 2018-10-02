@@ -112,4 +112,17 @@
 
     <!-- Label for the book's price if it's not yet assigned [CHAR LIMIT=20] -->
     <string name="unknown_price">Price not determined at this time.</string>
+
+    <!-- Minus symbol for decreasing quantity of books -->
+    <string name="decrease">-</string>
+
+    <!-- Plus symbol for increasing quantity of books -->
+    <string name="increase">+</string>
+
+    <!-- Minus symbol for decrementing quantity of books -->
+    <string name="reorder">Reorder</string>
+
+    <!-- Minus symbol for decrementing quantity of books -->
+    <string name="remove">Remove</string>
+
 </resources>

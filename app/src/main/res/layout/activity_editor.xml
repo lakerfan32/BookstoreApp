@@ -48,6 +48,28 @@
                 android:hint="@string/hint_quantity"
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Button for reducing quantity -->
+                <Button
+                    android:id="@+id/decrement_btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:text="@string/decrease" />
+
+                <!-- Button for increasing quantity -->
+                <Button
+                    android:id="@+id/increment_btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="8dp"
+                    android:text="@string/increase" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -84,7 +106,24 @@
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle" />
 
+            <!-- Reorder button (calls supplier via intent) -->
+            <Button
+                android:id="@+id/reorder_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:text="@string/reorder" />
+
+            <!-- Remove book from database -->
+            <Button
+                android:id="@+id/delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:text="@string/delete" />
+
         </LinearLayout>
+
     </LinearLayout>
 
     <!-- Book category -->
@@ -128,7 +167,7 @@
             style="@style/CategoryStyle" />
 
         <!-- Input fields -->
-        <RelativeLayout
+        <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="2"
@@ -141,6 +180,6 @@
                 android:hint="@string/hint_genre"
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle" />
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
