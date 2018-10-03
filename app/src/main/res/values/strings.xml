@@ -125,4 +125,7 @@
     <!-- Minus symbol for decrementing quantity of books -->
     <string name="remove">Remove</string>
 
+    <!-- Text for Sale button -->
+    <string name="sale_button">Sale</string>
+
 </resources>
