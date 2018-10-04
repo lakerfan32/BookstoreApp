@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -56,6 +57,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     /** EditText field to enter the books's genre */
     private EditText mGenreEditText;
+
+    /** Button that increases quantity of books */
+    private Button mIncrementButton;
+
+    /** Button that decreases quantity of books */
+    private Button mDecrementButton;
+
+    /** Intent Button to contact supplier using product supplier phone number */
+    private Button mCallButton;
+
+    int quantity;
 
     /**
      * Category of the book. The possible valid values are in the BookContract.java file:
@@ -115,6 +127,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierPhoneEditText = (EditText) findViewById(R.id.edit_supplier_phone);
         mCategorySpinner = (Spinner) findViewById(R.id.spinner_category);
         mGenreEditText = (EditText) findViewById(R.id.edit_book_genre);
+        mIncrementButton = (Button) findViewById(R.id.increment_btn);
+        mDecrementButton = (Button) findViewById(R.id.decrement_btn);
+        //mCallButton = (Button) findViewById(R.id.call_btn);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -126,6 +141,38 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierPhoneEditText.setOnTouchListener(mTouchListener);
         mCategorySpinner.setOnTouchListener(mTouchListener);
         mGenreEditText.setOnTouchListener(mTouchListener);
+
+        // Setup OnClickListener on the increment button and increase the quantity accordingly
+        mIncrementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(mQuantityEditText.getText().toString())){
+                    mQuantityEditText.setText(String.valueOf(0));
+                }
+
+                if (mQuantityEditText!=null) {
+                    quantity = Integer.parseInt(mQuantityEditText.getText().toString());
+                    quantity++;
+                    mQuantityEditText.setText(String.valueOf(quantity));
+                }
+            }
+        });
+
+        // Setup OnClickListener on the decrement button and decrease the quantity accordingly
+        mDecrementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(mQuantityEditText.getText().toString())){
+                    mQuantityEditText.setText(String.valueOf(0));
+                }
+
+                if (mQuantityEditText!=null&&quantity>0) {
+                    quantity = Integer.parseInt(mQuantityEditText.getText().toString());
+                    quantity--;
+                    mQuantityEditText.setText(String.valueOf(quantity));
+                }
+            }
+        });
 
         setupSpinner();
     }
