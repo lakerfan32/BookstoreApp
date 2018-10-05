@@ -1,11 +1,15 @@
 package com.udacity.ralph.bookstoreapp;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
@@ -19,6 +23,11 @@ import com.udacity.ralph.bookstoreapp.data.BookContract.BookEntry;
 public class BookCursorAdapter extends CursorAdapter {
 
     /**
+     * Setup Context of the app
+     */
+    private Context mContext;
+
+    /**
      * Constructs a new {@link BookCursorAdapter}.
      *
      * @param context The context
@@ -26,6 +35,7 @@ public class BookCursorAdapter extends CursorAdapter {
      */
     public BookCursorAdapter(Context context, Cursor c) {
         super(context, c, 0 /* flags */);
+        mContext = context;
     }
 
     /**
@@ -59,16 +69,19 @@ public class BookCursorAdapter extends CursorAdapter {
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
+        Button saleButton = (Button) view.findViewById(R.id.sale_button);
 
         // Find the columns of product attributes that we're interested in
+        int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
         int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
-        int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
+        final int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
 
         // Read the book attributes from the Cursor for the current book
+        final int bookId = cursor.getInt(idColumnIndex);
         String bookName = cursor.getString(nameColumnIndex);
         String bookPrice = cursor.getString(priceColumnIndex);
-        String bookQuantity = cursor.getString(quantityColumnIndex);
+        final int[] bookQuantity = {cursor.getInt(quantityColumnIndex)};
 
         // If the book price is empty string or null, then use some default text
         // that says "Price not determined at this time", so the TextView isn't blank.
@@ -79,6 +92,27 @@ public class BookCursorAdapter extends CursorAdapter {
         // Update the TextViews with the attributes for the current book
         nameTextView.setText(bookName);
         priceTextView.setText("$" + bookPrice);
-        quantityTextView.setText("In Stock: " + bookQuantity);
+        quantityTextView.setText("In Stock: " + String.valueOf(bookQuantity[0]));
+
+        /**
+         * This method is the OnClickListener for the Sale button in the list item layout.
+         * It updates the quantity accordingly in the quantity in stock.
+         */
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mContext = context;
+                if (bookQuantity[0] > 0) {
+
+                    bookQuantity[0]--;
+                    Uri currentUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI,bookId);
+                    ContentValues values = new ContentValues();
+                    values.put(BookEntry.COLUMN_QUANTITY, bookQuantity[0]);
+                    mContext.getContentResolver().update(currentUri,values,null,null);
+
+                }
+            }
+        });
+
     }
 }
