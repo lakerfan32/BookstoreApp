@@ -67,6 +67,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /** Intent Button to contact supplier using product supplier phone number */
     private Button mContactButton;
 
+    /** Intent Button to delete book from inventory  */
+    private Button mDeleteButton;
+
     int quantity;
 
     /**
@@ -130,6 +133,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mIncrementButton = (Button) findViewById(R.id.increment_btn);
         mDecrementButton = (Button) findViewById(R.id.decrement_btn);
         mContactButton = (Button) findViewById(R.id.contact_supplier_btn);
+        mDeleteButton = (Button) findViewById(R.id.delete_btn);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -184,6 +188,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
                 }
+            }
+        });
+
+        // Create an onclick listener for the deleteBtn
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDeleteConfirmationDialog();
             }
         });
 

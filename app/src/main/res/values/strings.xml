@@ -123,7 +123,7 @@
     <string name="contact_supplier">Contact Supplier</string>
 
     <!-- Text for Remove button deletes book from database -->
-    <string name="remove">Remove</string>
+    <string name="delete_from_inventory">Delete from Stock</string>
 
     <!-- Text for Sale button -->
     <string name="sale_button">Sale</string>
