@@ -119,10 +119,10 @@
     <!-- Plus symbol for increasing quantity of books -->
     <string name="increase">+</string>
 
-    <!-- Minus symbol for decrementing quantity of books -->
-    <string name="reorder">Reorder</string>
+    <!-- Text for Contact Supplier button to call supplier phone number to order book -->
+    <string name="contact_supplier">Contact Supplier</string>
 
-    <!-- Minus symbol for decrementing quantity of books -->
+    <!-- Text for Remove button deletes book from database -->
     <string name="remove">Remove</string>
 
     <!-- Text for Sale button -->

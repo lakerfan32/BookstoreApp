@@ -65,7 +65,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Button mDecrementButton;
 
     /** Intent Button to contact supplier using product supplier phone number */
-    private Button mCallButton;
+    private Button mContactButton;
 
     int quantity;
 
@@ -129,7 +129,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mGenreEditText = (EditText) findViewById(R.id.edit_book_genre);
         mIncrementButton = (Button) findViewById(R.id.increment_btn);
         mDecrementButton = (Button) findViewById(R.id.decrement_btn);
-        //mCallButton = (Button) findViewById(R.id.call_btn);
+        mContactButton = (Button) findViewById(R.id.contact_supplier_btn);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -170,6 +170,19 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                     quantity = Integer.parseInt(mQuantityEditText.getText().toString());
                     quantity--;
                     mQuantityEditText.setText(String.valueOf(quantity));
+                }
+            }
+        });
+
+        // Setup intent for Contact Supplier button which makes a call to the supplier phone number provided
+        mContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String contactPhone = mSupplierPhoneEditText.getText().toString().trim();
+                // create intent
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + contactPhone));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
                 }
             }
         });

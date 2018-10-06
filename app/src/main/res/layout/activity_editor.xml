@@ -108,11 +108,11 @@
 
             <!-- Reorder button (calls supplier via intent) -->
             <Button
-                android:id="@+id/reorder_btn"
+                android:id="@+id/contact_supplier_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:padding="8dp"
-                android:text="@string/reorder" />
+                android:text="@string/contact_supplier" />
 
             <!-- Remove book from database -->
             <Button
