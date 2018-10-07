@@ -39,14 +39,14 @@
             <EditText
                 android:id="@+id/edit_book_price"
                 android:hint="@string/hint_price"
-                android:inputType="textCapWords"
+                android:inputType="number"
                 style="@style/EditorFieldStyle" />
 
             <!-- Quantity field -->
             <EditText
                 android:id="@+id/edit_book_quantity"
                 android:hint="@string/hint_quantity"
-                android:inputType="textCapWords"
+                android:inputType="number"
                 style="@style/EditorFieldStyle" />
 
             <LinearLayout
@@ -57,17 +57,17 @@
                 <!-- Button for reducing quantity -->
                 <Button
                     android:id="@+id/decrement_btn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="8dp"
+                    android:layout_width="@dimen/quantity_button_width"
+                    android:layout_height="@dimen/quantity_button_height"
+                    android:padding="@dimen/button_padding"
                     android:text="@string/decrease" />
 
                 <!-- Button for increasing quantity -->
                 <Button
                     android:id="@+id/increment_btn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="8dp"
+                    android:layout_width="@dimen/quantity_button_width"
+                    android:layout_height="@dimen/quantity_button_height"
+                    android:padding="@dimen/button_padding"
                     android:text="@string/increase" />
             </LinearLayout>
         </LinearLayout>
@@ -103,23 +103,23 @@
             <EditText
                 android:id="@+id/edit_supplier_phone"
                 android:hint="@string/hint_supplier_phone"
-                android:inputType="textCapWords"
+                android:inputType="number"
                 style="@style/EditorFieldStyle" />
 
-            <!-- Reorder button (calls supplier via intent) -->
+            <!-- Contact supplier button (calls supplier via intent) -->
             <Button
                 android:id="@+id/contact_supplier_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:padding="8dp"
+                android:layout_height="@dimen/contact_button_height"
+                android:padding="@dimen/button_padding"
                 android:text="@string/contact_supplier" />
 
             <!-- Remove book from database -->
             <Button
                 android:id="@+id/delete_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:padding="8dp"
+                android:layout_height="@dimen/delete_button_height"
+                android:padding="@dimen/button_padding"
                 android:text="@string/delete_from_inventory" />
 
         </LinearLayout>
@@ -148,7 +148,7 @@
             <!-- Category drop-down spinner -->
             <Spinner
                 android:id="@+id/spinner_category"
-                android:layout_height="48dp"
+                android:layout_height="@dimen/category_spinner_height"
                 android:layout_width="wrap_content"
                 android:paddingRight="@dimen/drop_down_right_padding"
                 android:spinnerMode="dropdown"/>

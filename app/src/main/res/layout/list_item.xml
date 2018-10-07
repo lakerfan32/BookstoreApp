@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:minHeight="96dp"
+    android:minHeight="@dimen/list_item_height"
     android:padding="@dimen/activity_margin">
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="#2B3D4D"  />
+            android:textColor="@color/itemNameColor"  />
 
         <TextView
             android:id="@+id/price"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#AEB6BD"  />
+            android:textColor="@color/inventoryListColor"  />
 
         <TextView
             android:id="@+id/quantity"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#AEB6BD"  />
+            android:textColor="@color/inventoryListColor"  />
     </LinearLayout>
 
     <Button
@@ -42,7 +42,7 @@
         android:text="@string/sale_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="@dimen/button_padding"
         android:layout_alignParentRight="true"
         android:focusable="false"/>
 

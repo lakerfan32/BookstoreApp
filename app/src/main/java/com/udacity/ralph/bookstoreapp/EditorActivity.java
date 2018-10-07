@@ -70,6 +70,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /** Intent Button to delete book from inventory  */
     private Button mDeleteButton;
 
+    /** Use quantity variable to adjust number of books in inventory */
     int quantity;
 
     /**

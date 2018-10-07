@@ -14,4 +14,13 @@
 
     <!-- Primary dark color for the editor -->
     <color name="editorColorPrimaryDark">#394450</color>
+
+    <!-- List item product name color -->
+    <color name="itemNameColor">#2B3D4D</color>
+
+    <!-- Inventory list items color -->
+    <color name="inventoryListColor">#AEB6BD</color>
+
+    <!-- Empty subtitle text color -->
+    <color name="emptySubtitleColor">#A2AAB0</color>
 </resources>
