@@ -101,31 +101,48 @@
     <!-- Price of book, in US Dollars (kilograms) [CHAR LIMIT=5] -->
     <string name="price_in_US_dollars">USD</string>
 
-    <!-- Label for dropdown menu option if the book's category is unknown [CHAR LIMIT=20] -->
+    <!-- Label for dropdown menu option if the book's category is unknown [CHAR LIMIT=10] -->
     <string name="category_unknown">Unknown</string>
 
-    <!-- Label for dropdown menu option if the book is fiction [CHAR LIMIT=20] -->
+    <!-- Label for dropdown menu option if the book is fiction [CHAR LIMIT=10] -->
     <string name="category_fiction">Fiction</string>
 
-    <!-- Label for dropdown menu option if the book is nonfiction [CHAR LIMIT=20] -->
+    <!-- Label for dropdown menu option if the book is nonfiction [CHAR LIMIT=10] -->
     <string name="category_nonfiction">NonFiction</string>
 
-    <!-- Label for the book's price if it's not yet assigned [CHAR LIMIT=20] -->
+    <!-- Label for the book's price if it's not yet assigned [CHAR LIMIT=NONE] -->
     <string name="unknown_price">Price not determined at this time.</string>
 
-    <!-- Minus symbol for decreasing quantity of books -->
+    <!-- Minus symbol for decreasing quantity of books [CHAR LIMIT=NONE] -->
     <string name="decrease">-</string>
 
-    <!-- Plus symbol for increasing quantity of books -->
+    <!-- Plus symbol for increasing quantity of books [CHAR LIMIT=NONE] -->
     <string name="increase">+</string>
 
-    <!-- Text for Contact Supplier button to call supplier phone number to order book -->
+    <!-- Text for Contact Supplier button to call supplier phone number to order book [CHAR LIMIT=NONE] -->
     <string name="contact_supplier">Contact Supplier</string>
 
-    <!-- Text for Remove button deletes book from database -->
+    <!-- Text for Remove button deletes book from database [CHAR LIMIT=NONE] -->
     <string name="delete_from_inventory">Delete from Stock</string>
 
-    <!-- Text for Sale button -->
+    <!-- Text for Sale button [CHAR LIMIT=NONE] -->
     <string name="sale_button">Sale</string>
 
+    <!-- Toast message that prompts the user to add a product name when Empty [CHAR LIMIT=NONE] -->
+    <string name="name_required">Product name required</string>
+
+    <!-- Toast message that prompts the user to add a price when Empty [CHAR LIMIT=NONE] -->
+    <string name="price_required">Price required</string>
+
+    <!-- Toast message that prompts the user to add a quantity when Empty [CHAR LIMIT=NONE] -->
+    <string name="quantity_required">Quantity required</string>
+
+    <!-- Toast message that prompts the user to add a supplier name when Empty [CHAR LIMIT=NONE] -->
+    <string name="supplier_required">Supplier name required</string>
+
+    <!-- Toast message that prompts the user to add a supplier phone number when Empty [CHAR LIMIT=NONE] -->
+    <string name="phone_required">Supplier phone required</string>
+
+    <!-- Toast message that prompts the user to add a genre when Empty [CHAR LIMIT=NONE] -->
+    <string name="genre_required">Genre required</string>
 </resources>

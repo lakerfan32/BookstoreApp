@@ -73,6 +73,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /** Use quantity variable to adjust number of books in inventory */
     int quantity;
 
+    /** Declare Book info variables as private */
+    private String productNameString;
+    private String priceString;
+    private String quantityString;
+    private String supplierNameString;
+    private String supplierPhoneString;
+    private String genreString;
+
     /**
      * Category of the book. The possible valid values are in the BookContract.java file:
      * {@link BookEntry#CATEGORY_UNKNOWN}, {@link BookEntry#CATEGORY_FICTION}, or
@@ -245,7 +253,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /**
      * Get user input from editor and save book into database.
      */
-    private void saveBook() {
+    private boolean saveBook() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String productNameString = mProductNameEditText.getText().toString().trim();
@@ -257,14 +265,33 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         // Check if this is supposed to be a new book
         // and check if all the fields in the editor are blank
-        if (mCurrentBookUri == null &&
-                TextUtils.isEmpty(productNameString) && TextUtils.isEmpty(priceString) &&
-                TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierNameString) &&
-                TextUtils.isEmpty(supplierPhoneString) && TextUtils.isEmpty(genreString) &&
-                mCategory == BookEntry.CATEGORY_UNKNOWN) {
+        if (mCurrentBookUri == null ||
+                TextUtils.isEmpty(productNameString) || TextUtils.isEmpty(priceString) ||
+                TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(supplierNameString) ||
+                TextUtils.isEmpty(supplierPhoneString) || TextUtils.isEmpty(genreString)) {
+
+            Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
+
+//        if (TextUtils.isEmpty(productNameString)) {
+//            Toast.makeText(this, getString(R.string.name_required), Toast.LENGTH_LONG).show();
+//            return false;
+//        } else if (TextUtils.isEmpty(priceString)) {
+//            Toast.makeText(this, getString(R.string.price_required), Toast.LENGTH_LONG).show();
+//            return false;
+//        } else if (TextUtils.isEmpty(quantityString)) {
+//            Toast.makeText(this, getString(R.string.quantity_required), Toast.LENGTH_LONG).show();
+//            return false;
+//        } else if (TextUtils.isEmpty(supplierNameString)) {
+//            Toast.makeText(this, getString(R.string.supplier_required), Toast.LENGTH_LONG).show();
+//            return false;
+//        } else if (TextUtils.isEmpty(supplierPhoneString)) {
+//            Toast.makeText(this, getString(R.string.phone_required), Toast.LENGTH_LONG).show();
+//            return false;
+//        } else if (TextUtils.isEmpty(genreString)) {
+//            Toast.makeText(this, getString(R.string.genre_required), Toast.LENGTH_LONG).show();
             // Since no fields were modified, we can return early without creating a new book.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-            return;
+              return false;
         }
 
         // Create a ContentValues object where column names are the keys,
@@ -287,13 +314,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             quantity = Integer.parseInt(quantityString);
         }
         values.put(BookEntry.COLUMN_QUANTITY, quantity);
-
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneString);
         values.put(BookEntry.COLUMN_CATEGORY, mCategory);
         values.put(BookEntry.COLUMN_GENRE, genreString);
 
-// Determine if this is a new or existing book by checking if mCurrentBookUri is null or not
+        // Determine if this is a new or existing book by checking if mCurrentBookUri is null or not
         if (mCurrentBookUri == null) {
             // This is a NEW book, so insert a new book into the provider,
             // returning the content URI for the new book.
@@ -327,6 +353,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                         Toast.LENGTH_SHORT).show();
             }
         }
+        return true;
     }
 
     @Override
