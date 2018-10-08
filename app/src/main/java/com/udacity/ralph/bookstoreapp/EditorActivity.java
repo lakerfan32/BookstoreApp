@@ -272,23 +272,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
             Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
 
-//        if (TextUtils.isEmpty(productNameString)) {
-//            Toast.makeText(this, getString(R.string.name_required), Toast.LENGTH_LONG).show();
-//            return false;
-//        } else if (TextUtils.isEmpty(priceString)) {
-//            Toast.makeText(this, getString(R.string.price_required), Toast.LENGTH_LONG).show();
-//            return false;
-//        } else if (TextUtils.isEmpty(quantityString)) {
-//            Toast.makeText(this, getString(R.string.quantity_required), Toast.LENGTH_LONG).show();
-//            return false;
-//        } else if (TextUtils.isEmpty(supplierNameString)) {
-//            Toast.makeText(this, getString(R.string.supplier_required), Toast.LENGTH_LONG).show();
-//            return false;
-//        } else if (TextUtils.isEmpty(supplierPhoneString)) {
-//            Toast.makeText(this, getString(R.string.phone_required), Toast.LENGTH_LONG).show();
-//            return false;
-//        } else if (TextUtils.isEmpty(genreString)) {
-//            Toast.makeText(this, getString(R.string.genre_required), Toast.LENGTH_LONG).show();
             // Since no fields were modified, we can return early without creating a new book.
             // No need to create ContentValues and no need to do any ContentProvider operations.
               return false;
