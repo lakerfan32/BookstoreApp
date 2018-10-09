@@ -73,7 +73,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /** Use quantity variable to adjust number of books in inventory */
     int quantity;
 
-    /** Declare Book info variables as private */
+    /** Declare Book info variables as private for validations */
     private String productNameString;
     private String priceString;
     private String quantityString;
@@ -250,10 +250,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         });
     }
 
-    /**
-     * Get user input from editor and save book into database.
-     */
-    private boolean saveBook() {
+    public boolean bookIsValid() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String productNameString = mProductNameEditText.getText().toString().trim();
@@ -263,18 +260,48 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
         String genreString = mGenreEditText.getText().toString().trim();
 
+        // If price is left empty, set to zero
+        if (TextUtils.isEmpty(priceString)) {
+            // Show the error in a toast message.
+            mPriceEditText.setText(String.valueOf(0));
+        }
+
+        // If quantity is left empty, set to zero
+        if (TextUtils.isEmpty(quantityString)) {
+            // Show the error in a toast message.
+            mQuantityEditText.setText(String.valueOf(0));
+        }
+
+        // Perform quick validation of Empty input fields
+        if (TextUtils.isEmpty(productNameString)) {
+            Toast.makeText(this, getString(R.string.name_required), Toast.LENGTH_LONG).show();
+            return false;
+        } else if (TextUtils.isEmpty(supplierNameString)) {
+            Toast.makeText(this, getString(R.string.supplier_required), Toast.LENGTH_LONG).show();
+            return false;
+        } else if (TextUtils.isEmpty(supplierPhoneString)) {
+            Toast.makeText(this, getString(R.string.phone_required), Toast.LENGTH_LONG).show();
+            return false;
+        } else if (TextUtils.isEmpty(genreString)) {
+            Toast.makeText(this, getString(R.string.genre_required), Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Get user input from editor and save book into database.
+     */
+    private void saveBook() {
         // Check if this is supposed to be a new book
         // and check if all the fields in the editor are blank
-        if (mCurrentBookUri == null ||
-                TextUtils.isEmpty(productNameString) || TextUtils.isEmpty(priceString) ||
-                TextUtils.isEmpty(quantityString) || TextUtils.isEmpty(supplierNameString) ||
-                TextUtils.isEmpty(supplierPhoneString) || TextUtils.isEmpty(genreString)) {
-
-            Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
-
+        if (TextUtils.isEmpty(productNameString) && TextUtils.isEmpty(priceString) &&
+            TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierNameString) &&
+            TextUtils.isEmpty(supplierPhoneString) && TextUtils.isEmpty(genreString)) {
             // Since no fields were modified, we can return early without creating a new book.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-              return false;
+            return;
         }
 
         // Create a ContentValues object where column names are the keys,
@@ -297,6 +324,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             quantity = Integer.parseInt(quantityString);
         }
         values.put(BookEntry.COLUMN_QUANTITY, quantity);
+
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneString);
         values.put(BookEntry.COLUMN_CATEGORY, mCategory);
@@ -336,7 +364,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                         Toast.LENGTH_SHORT).show();
             }
         }
-        return true;
     }
 
     @Override
@@ -369,10 +396,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save book to database
-                saveBook();
-                // Exit activity
-                finish();
-                return true;
+                if (bookIsValid()) {
+                    saveBook();
+                    // Exit activity
+                    finish();
+                    return true;
+                } else {
+                    return false;
+                }
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
                 // Pop up confirmation dialog for deletion
@@ -402,7 +433,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 showUnsavedChangesDialog(discardButtonClickListener);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
