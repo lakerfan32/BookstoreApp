@@ -294,6 +294,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      * Get user input from editor and save book into database.
      */
     private void saveBook() {
+        // Read from input fields
+        // Use trim to eliminate leading or trailing white space
+        String productNameString = mProductNameEditText.getText().toString().trim();
+        String priceString = mPriceEditText.getText().toString().trim();
+        String quantityString = mQuantityEditText.getText().toString().trim();
+        String supplierNameString = mSupplierNameEditText.getText().toString().trim();
+        String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
+        String genreString = mGenreEditText.getText().toString().trim();
+
         // Check if this is supposed to be a new book
         // and check if all the fields in the editor are blank
         if (TextUtils.isEmpty(productNameString) && TextUtils.isEmpty(priceString) &&
